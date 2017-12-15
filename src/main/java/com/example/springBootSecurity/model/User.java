@@ -104,14 +104,19 @@ public class User implements UserDetails {
     }
 
     /**
-     * Returns the authorities granted to the user. Cannot return <code>null</code>.
+     * 返回用户信息（包含权限）
+     *
+     * 特别注意：如果前缀是ROLE_，security就会认为这是个角色信息，而不是权限。例如ROLE_MENBER就是MENBER角色，CAN_SEND就是CAN_SEND权限
      *
      * @return the authorities, sorted by natural key (never <code>null</code>)
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> auths = new ArrayList<>();
+        //将角色数据返回至Security
         List<Role> roles = this.getRoles();
+        auths.addAll(roles);
+        //将权限数据返回至Security
         for (Role role : roles) {
             List<Authority> authorityList = findByRolename(role.getName());
             auths.addAll(authorityList);
@@ -128,9 +133,9 @@ public class User implements UserDetails {
     }
 
     /**
-     * 根据角色名称，返回角色所对应的权限
+     * 返回角色所对应的权限
      *
-     * 由于不连接数据库，此方法仅用于模拟测试
+     * 由于不连接数据库，此方法用于模拟效果
      * @param rolename
      * @return
      */

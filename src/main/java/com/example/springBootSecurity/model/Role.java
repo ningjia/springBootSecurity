@@ -1,6 +1,8 @@
 package com.example.springBootSecurity.model;
 
-public class Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public class Role implements GrantedAuthority {
 
     private Long id;
     private String name;
@@ -24,5 +26,10 @@ public class Role {
     public Role(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 }

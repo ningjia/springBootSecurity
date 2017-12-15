@@ -2,8 +2,10 @@ package com.example.springBootSecurity.mapper;
 
 import com.example.springBootSecurity.model.Role;
 import com.example.springBootSecurity.model.User;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class UserMapper {

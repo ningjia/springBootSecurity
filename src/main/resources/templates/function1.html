@@ -16,7 +16,20 @@
     通过sec:authentication获取的当前用户：<span sec:authentication="name"></span>
     </div>
 
+    <!-- 检查用户角色 -->
+    <h1>检查用户角色</h1>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        您具有ROLE_ADMIN角色
+    </div>
+    <div sec:authorize="hasRole('ROLE_TEST')">
+        您具有ROLE_TEST角色
+    </div>
+    <div sec:authorize="hasRole('ROLE_NORMAL')">
+        您具有ROLE_NORMAL角色
+    </div>
+
     <!-- 检查用户权限 -->
+    <h1>检查用户权限</h1>
     <div sec:authorize="hasAuthority('AUTH_ADMIN')">
         您具有AUTH_ADMIN权限
     </div>
@@ -26,43 +39,14 @@
     <div sec:authorize="hasAuthority('AUTH_NORMAL_1')">
         您具有AUTH_NORMAL_1权限
     </div>
-
----3.x
-    <sec:authorize ifAllGranted="AUTH_TEST_1,AUTH_TEST_2">
-        <p>Must have AUTH_TEST_1 and AUTH_TEST_2</p>
-    </sec:authorize>
-    <sec:authorize ifAnyGranted="AUTH_TEST_1,AUTH_TEST_2">
-        <p>Must have AUTH_TEST_1 or AUTH_TEST_2</p>
-    </sec:authorize>
-    <sec:authorize ifNotGranted="AUTH_TEST_1,AUTH_TEST_2">
-        <p>Must not have AUTH_TEST_1 or AUTH_TEST_2</p>
-    </sec:authorize>
-
---4.x
-    <sec:authorize access="hasAuthority('AUTH_TEST_1') and hasAuthority('AUTH_TEST_2')">
-        <p>同时拥有AUTH_TEST_1和AUTH_TEST_2两个权限时，才能显示标签内部内容</p>
-    </sec:authorize>
-
-    <sec:authorize access="hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">
-        <p>拥有AUTH_TEST_1和AUTH_TEST_2其中一个权限时，就能显示标签内部内容</p>
-    </sec:authorize>
-
-    <sec:authorize access="!hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">
-        <p>如果当前用户没有AUTH_TEST_1或AUTH_TEST_2权限时，才能显示标签内部内容</p>
-    </sec:authorize>
-
-    --role
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <p>具有ROLE_ADMIN</p>
+    <div >
+        测试：同时拥有AUTH_TEST_1和AUTH_TEST_2两个权限时，才能显示标签内部内容：<span sec:authorize="hasAuthority('AUTH_TEST_1') and hasAuthority('AUTH_TEST_2')">OK</span>
     </div>
-    <div sec:authorize="hasRole('ROLE_NORMAL')">
-        <p>具有ROLE_NORMAL</p>
+    <div>
+        测试：拥有AUTH_TEST_1和AUTH_TEST_2其中一个权限时，就能显示标签内部内容：<span sec:authorize="hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">OK</span>
     </div>
-    <div sec:authorize="hasRole('AUTH_ADMIN')">
-        <p>具有AUTH_ADMIN</p>
-    </div>
-    <div sec:authorize="hasRole('AUTH_NORMAL_1')">
-        <p>具有AUTH_NORMAL_1</p>
+    <div>
+        测试：如果当前用户没有AUTH_TEST_1或AUTH_TEST_2权限时，才能显示标签内部内容：<span sec:authorize="!hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">OK</span>
     </div>
 
     <form th:action="@{/logout}" method="post">
