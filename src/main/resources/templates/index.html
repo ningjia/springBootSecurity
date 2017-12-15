@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Security Sample</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+
+<h1>欢迎使用Spring Security!</h1>
+<p><a th:href="@{/function1}">前往功能1</a>（需要进行登陆状态检查）</p>
+<p><a th:href="@{/function2}">前往功能2</a>（不进行登陆状态检查）</p>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>功能1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>这里是功能1</h1>
+
+    <!-- 获取登录用户信息 -->
+    <div>
+        通过Request获取的当前用户：<span th:inline="text">[[${#httpServletRequest.remoteUser}]]</span>
+    </div>
+    <div>
+    通过sec:authentication获取的当前用户：<span sec:authentication="name"></span>
+    </div>
+
+    <!-- 检查用户权限 -->
+    <div sec:authorize="hasAuthority('AUTH_ADMIN')">
+        您具有AUTH_ADMIN权限
+    </div>
+    <div sec:authorize="hasAuthority('AUTH_TEST_1')">
+        您具有AUTH_TEST_1权限
+    </div>
+    <div sec:authorize="hasAuthority('AUTH_NORMAL_1')">
+        您具有AUTH_NORMAL_1权限
+    </div>
+
+---3.x
+    <sec:authorize ifAllGranted="AUTH_TEST_1,AUTH_TEST_2">
+        <p>Must have AUTH_TEST_1 and AUTH_TEST_2</p>
+    </sec:authorize>
+    <sec:authorize ifAnyGranted="AUTH_TEST_1,AUTH_TEST_2">
+        <p>Must have AUTH_TEST_1 or AUTH_TEST_2</p>
+    </sec:authorize>
+    <sec:authorize ifNotGranted="AUTH_TEST_1,AUTH_TEST_2">
+        <p>Must not have AUTH_TEST_1 or AUTH_TEST_2</p>
+    </sec:authorize>
+
+--4.x
+    <sec:authorize access="hasAuthority('AUTH_TEST_1') and hasAuthority('AUTH_TEST_2')">
+        <p>同时拥有AUTH_TEST_1和AUTH_TEST_2两个权限时，才能显示标签内部内容</p>
+    </sec:authorize>
+
+    <sec:authorize access="hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">
+        <p>拥有AUTH_TEST_1和AUTH_TEST_2其中一个权限时，就能显示标签内部内容</p>
+    </sec:authorize>
+
+    <sec:authorize access="!hasAnyAuthority('AUTH_TEST_1','AUTH_TEST_2')">
+        <p>如果当前用户没有AUTH_TEST_1或AUTH_TEST_2权限时，才能显示标签内部内容</p>
+    </sec:authorize>
+
+    --role
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <p>具有ROLE_ADMIN</p>
+    </div>
+    <div sec:authorize="hasRole('ROLE_NORMAL')">
+        <p>具有ROLE_NORMAL</p>
+    </div>
+    <div sec:authorize="hasRole('AUTH_ADMIN')">
+        <p>具有AUTH_ADMIN</p>
+    </div>
+    <div sec:authorize="hasRole('AUTH_NORMAL_1')">
+        <p>具有AUTH_NORMAL_1</p>
+    </div>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="注销"/>
+    </form>
+    <p><a th:href="@{/}">返回首页</a></p>
+</body>
+</html>
