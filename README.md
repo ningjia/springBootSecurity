@@ -7,7 +7,7 @@
 ### 定义角色
 ```java
 @Entity
-public class SysRole {
+public class SysRole implements GrantedAuthority {
     @Id
     @GeneratedValue
     private Long id;
@@ -26,6 +26,7 @@ public class SysRole {
     }
 }
 ```
+- 如果希望SpringSecurity中管理相关角色/权限，需要实线接口org.springframework.security.core.GrantedAuthority。
 ### 定义用户
 ```java
 public class User implements UserDetails {
@@ -38,7 +39,10 @@ public class User implements UserDetails {
 }
 ```
 - 自定义的用户对象必须实现接口org.springframework.security.core.userdetails.UserDetails
-- 通过实现getAuthorities()方法，设置用户的权限数组
+- 通过实现getAuthorities()方法，设置用户的权限数组。
+    - 特别注意：SpringSecutiry根据名称判断authorities数组中的对象是角色还是权限
+    - 如果前缀是ROLE_，security就会认为这是个角色信息，而不是权限。
+    - 例如ROLE_MENBER就是MENBER角色，CAN_SEND就是CAN_SEND权限。
 - 注意修改UserDetails接口中如下方法的返回值
 ```text
     isAccountNonExpired
@@ -96,9 +100,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 ```
 ### 标签说明
 - 获得当前登陆的用户名：<sec:authentication property="name"/>
-
-
-## 四、Refer
+- 权限检查
+    - 需要同时拥有AUTH_1和AUTH_2两个权限时：
+        - sec:authorize="hasAuthority('AUTH_1') and hasAuthority('AUTH_2')"
+    - 只需要拥有AUTH_1和AUTH_2其中一个权限时：
+        - sec:authorize="hasAnyAuthority('AUTH_1','AUTH_2')"
+    - 必须没有AUTH_1或AUTH_2权限时：
+        - sec:authorize="!hasAnyAuthority('AUTH_1','AUTH_2')"
+## 七、Refer
 - [在Spring Boot中使用Spring Security实现权限控制](http://blog.csdn.net/u012702547/article/details/54319508)
 - [Spring Security 入门：登录与退出](http://www.jianshu.com/p/a8e317e82425)
 - [spring security之httpSecurity使用示例](https://www.cnblogs.com/davidwang456/p/4549344.html?utm_source=tuicool)
